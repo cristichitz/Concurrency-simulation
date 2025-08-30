@@ -28,13 +28,6 @@ Five philosophers sit around a circular table with five forks. Each philosopher 
 - **Timestamp logging** for state transitions
 - **Smart fork ordering** to break circular wait conditions
 
-### Deadlock Prevention Strategy
-```c
-// Even philosophers: pick left fork first, then right
-// Odd philosophers: pick right fork first, then left
-// This breaks the circular wait condition
-```
-
 ## 📋 Usage
 
 ### Compilation
@@ -75,14 +68,6 @@ make
 ```
 [timestamp_ms] [philosopher_id] [action]
 ```
-
-**Actions:**
-- `is thinking` - Philosopher is in thinking state
-- `has taken a fork` - Philosopher picked up a fork
-- `is eating` - Philosopher is eating (has both forks)
-- `is sleeping` - Philosopher is sleeping
-- `died` - Philosopher died from starvation
-
 **Example Output:**
 ```
 0 1 is thinking
@@ -96,11 +81,6 @@ make
 ```
 
 ## 🔧 Development
-
-### Debug Build
-```bash
-make CFLAGS="-Wall -Werror -Wextra -g -fsanitize=thread"
-```
 
 ### Memory Leak Detection
 ```bash
@@ -127,37 +107,6 @@ valgrind --tool=helgrind ./philo_exec 5 800 200 200
 ├── Makefile              # Build configuration
 └── README.md             # This file
 ```
-
-## 🧠 Algorithm Insights
-
-### Why This Problem Matters
-The Dining Philosophers problem illustrates fundamental challenges in concurrent programming:
-
-1. **Deadlock**: All philosophers pick up their left fork simultaneously
-2. **Starvation**: One philosopher never gets both forks
-3. **Race Conditions**: Unsynchronized access to shared resources
-
-### Solution Highlights
-- **Asymmetric fork acquisition**: Even/odd philosophers use different ordering
-- **Atomic simulation control**: Thread-safe start/stop mechanisms
-- **Precise death detection**: Continuous monitoring of last meal times
-- **Resource cleanup**: Proper mutex destruction and memory management
-
-## ⚡ Performance Considerations
-
-- **Minimal locking overhead**: Forks are only locked when needed
-- **Efficient timing**: Uses high-resolution timestamps
-- **Scalable design**: Works with any number of philosophers
-- **Memory efficient**: Linear memory usage O(n)
-
-## 🐛 Common Issues & Solutions
-
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Immediate death | `time_to_die` too small | Increase death timer or reduce eat/sleep times |
-| Deadlock | All philosophers pick same fork first | Implement asymmetric fork ordering |
-| Race conditions | Unprotected shared data | Use atomic operations for shared variables |
-| Memory leaks | Missing cleanup | Ensure all mallocs have corresponding frees |
 
 ## 📚 Learning Outcomes
 
