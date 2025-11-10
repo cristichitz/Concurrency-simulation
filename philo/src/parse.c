@@ -26,6 +26,23 @@ void	assign_fork(t_philo *philo, int i, t_data *data)
 	}
 }
 
+t_data	*parse_helper(int argc, char *argv[], t_data *data)
+{
+	data->think_time = think_time(data);
+	if (argc == 6)
+	{
+		if (ft_atoi(argv[5], (uint64_t *)&data->must_eat) != 0)
+			return (parsing_error(data));
+	}
+	else
+		data->must_eat = -1;
+	data->simulation_end = 0;
+	data->philos = NULL;
+	data->forks = NULL;
+	data->threads = NULL;
+	return (data);
+}
+
 t_data	*parse_input(int argc, char *argv[])
 {
 	t_data	*data;
@@ -34,19 +51,18 @@ t_data	*parse_input(int argc, char *argv[])
 	if (!data)
 		return (NULL);
 	memset(data, 0, sizeof(t_data));
-	data->num_philos = ft_atoi(argv[1], data);
-	data->die_time = ft_atoi(argv[2], data);
-	data->eat_time = ft_atoi(argv[3], data);
-	data->sleep_time = ft_atoi(argv[4], data);
-	data->think_time = think_time(data);
-	if (argc == 6)
-		data->must_eat = ft_atoi(argv[5], data);
-	else
-		data->must_eat = -1;
-	data->simulation_end = 0;
-	data->philos = NULL;
-	data->forks = NULL;
-	data->threads = NULL;
+	if (ft_atoi(argv[1], (uint64_t *)&data->num_philos) != 0)
+		return (parsing_error(data));
+	if (data->num_philos < 1)
+		return (parsing_error(data));
+	if (ft_atoi(argv[2], &data->die_time) != 0)
+		return (parsing_error(data));
+	if (ft_atoi(argv[3], &data->eat_time) != 0)
+		return (parsing_error(data));
+	if (ft_atoi(argv[4], &data->sleep_time) != 0)
+		return (parsing_error(data));
+	if (parse_helper(argc, argv, data) == NULL)
+		return (NULL);
 	return (data);
 }
 

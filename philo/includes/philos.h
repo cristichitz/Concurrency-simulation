@@ -20,6 +20,7 @@
 # include <stdint.h>
 # include <sys/time.h>
 # include <string.h>
+# include <limits.h>
 # define FRK "has taken a fork"
 # define EAT "is eating"
 # define SLP "is sleeping"
@@ -56,13 +57,14 @@ typedef struct s_data
 	_Atomic int			simulation_end;
 }	t_data;
 
+int			cleanup_data(t_data *data);
+t_data		*parsing_error(t_data *data);
 uint64_t	get_time(void);
 int			think_time(t_data *data);
-int			ft_atoi(const char *nptr, t_data *data);
+int			ft_atoi(const char *nptr, uint64_t *result);
 t_data		*parse_input(int argc, char *argv[]);
 t_philo		*init_data(t_data *data);
 int			error_msg(char *str, t_data *data);
-void		cleanup_data(t_data *data);
 int			main(int argc, char *argv[]);
 int			think_time(t_data *data);
 uint64_t	get_time(void);

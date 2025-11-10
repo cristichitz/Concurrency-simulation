@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 #include "philos.h"
 
-void	cleanup_data(t_data *data)
+int	cleanup_data(t_data *data)
 {
 	int	i;
 
 	if (!data)
-		return ;
+		return (1);
 	if (data->forks)
 	{
 		i = 0;
@@ -33,6 +33,7 @@ void	cleanup_data(t_data *data)
 	if (data->threads)
 		free(data->threads);
 	free(data);
+	return (0);
 }
 
 int	error_msg(char *str, t_data *data)
@@ -40,7 +41,15 @@ int	error_msg(char *str, t_data *data)
 	printf("%s", str);
 	if (data)
 		free(data);
-	exit(1);
+	return (-1);
+}
+
+t_data	*parsing_error(t_data *data)
+{
+	printf("Error: Input valid numbers.\n");
+	if (data)
+		free(data);
+	return (NULL);
 }
 
 int	main(int argc, char *argv[])
@@ -59,10 +68,8 @@ int	main(int argc, char *argv[])
 	if (data->num_philos == 1)
 	{
 		one_philo(data);
-		cleanup_data(data);
-		return (0);
+		return (cleanup_data(data));
 	}
 	start_simulation(data);
-	cleanup_data(data);
-	return (0);
+	return (cleanup_data(data));
 }

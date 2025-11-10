@@ -67,8 +67,8 @@ int	start_simulation(t_data *data)
 	i = 0;
 	while (i < data->num_philos)
 	{
-		pthread_create(&data->threads[i], NULL,
-			philosopher_routine, &data->philos[i]);
+		if (pthread_create(&data->threads[i], NULL, philosopher_routine, &data->philos[i]) != 0)
+			return (cleanup_data(data));
 		i++;
 	}
 	data->start_time = get_time();
@@ -76,7 +76,8 @@ int	start_simulation(t_data *data)
 	i = 0;
 	while (i < data->num_philos)
 	{
-		pthread_join(data->threads[i], NULL);
+		if (pthread_join(data->threads[i], NULL) == -1)
+			return (cleanup_data(data));
 		i++;
 	}
 	return (0);
@@ -91,6 +92,7 @@ void	one_philo(t_data *data)
 	pthread_mutex_lock(data->philos->left_fork);
 	timestamp_message(data->philos, FRK);
 	pthread_mutex_unlock(data->philos->left_fork);
+	timestamp_message(data->philos, THK);
 	while (!data->simulation_end)
 	{
 		i = 0;

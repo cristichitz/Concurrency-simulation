@@ -15,10 +15,14 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -Iincludes
 LDLIBS = -lpthread
 
-SRC_DIRS = src utils
+SRC_DIR = src
 OBJ_DIR = object
 
-SRC =   $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+MAIN_FILES = philos.c sim_start.c philo_routine.c parse.c utils.c
+
+# SRC =   $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+
+SRC = $(addprefix $(SRC_DIR)/, $(MAIN_FILES))
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
